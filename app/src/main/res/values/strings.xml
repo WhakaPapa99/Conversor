@@ -3,4 +3,12 @@
     <string name="converter_title">Conversor</string>
     <string name="converter_type_label">Tipo de conversor:</string>
     <string name="converter_type_accessibility">Tipo de conversor</string>
+
+    <string-array name="converter_types">
+        <item>Velocidad</item>
+        <item>Presión</item>
+        <item>Almacenamiento de datos</item>
+        <item>Temperatura</item>
+        <item>Moneda</item>
+    </string-array>
 </resources>

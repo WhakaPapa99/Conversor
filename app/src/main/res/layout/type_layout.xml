@@ -43,12 +43,13 @@
             android:id="@+id/spinnerType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
+            android:minHeight="20dp"
             android:contentDescription="@string/converter_type_accessibility"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/textViewType"
-            app:layout_constraintTop_toTopOf="@id/textViewType" />
+            app:layout_constraintTop_toTopOf="@id/textViewType"
+            android:entries="@array/converter_types"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
