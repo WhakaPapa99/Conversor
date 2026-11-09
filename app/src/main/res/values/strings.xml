@@ -3,6 +3,10 @@
     <string name="converter_title">Conversor</string>
     <string name="converter_type_label">Tipo de conversor:</string>
     <string name="converter_type_accessibility">Tipo de conversor</string>
+    <string name="number_to_convert">Número a convertir</string>
+    <string name="conversion_category_image">Imagen de la categoría seleccionada</string>
+    <string name="conversion_result">Resultado:</string>
+    <string name="convert">Convertir</string>
 
     <string-array name="converter_types">
         <item>Velocidad</item>
