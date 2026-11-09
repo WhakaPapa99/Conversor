@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="brand_blue">#2864A8</color>
+    <color name="text_primary">#18324B</color>
+    <color name="text_secondary">#66788A</color>
+    <color name="surface_card">#FFFFFFFF</color>
+    <color name="card_outline">#D8E6EE</color>
+    <color name="illustration_surface">#EEF7FA</color>
 </resources>

@@ -6,13 +6,68 @@
     <string name="number_to_convert">Número a convertir</string>
     <string name="conversion_category_image">Imagen de la categoría seleccionada</string>
     <string name="conversion_result">Resultado:</string>
+    <string name="result_placeholder">—</string>
     <string name="convert">Convertir</string>
+    <string name="enter_number_message">Introduce un número para convertir.</string>
+    <string name="invalid_number_message">El valor introducido no es válido.</string>
+    <string name="conversion_heading">Conversión de unidades</string>
+    <string name="conversion_subtitle">Elige un valor y las unidades que quieres convertir.</string>
+    <string name="source_value_label">Valor y unidad de origen</string>
+    <string name="target_unit_label">Unidad de destino</string>
+    <string name="currency_sample_notice">Tasas de muestra del BCE · 09/11/2026</string>
 
     <string-array name="converter_types">
+        <item>Distancia</item>
         <item>Velocidad</item>
         <item>Presión</item>
         <item>Almacenamiento de datos</item>
         <item>Temperatura</item>
         <item>Moneda</item>
+    </string-array>
+
+    <string-array name="units_distance">
+        <item>m (metros)</item>
+        <item>km (kilómetros)</item>
+        <item>cm (centímetros)</item>
+        <item>mm (milímetros)</item>
+        <item>mi (millas)</item>
+        <item>ft (pies)</item>
+        <item>in (pulgadas)</item>
+    </string-array>
+
+    <string-array name="units_speed">
+        <item>m/s (metros por segundo)</item>
+        <item>km/h (kilómetros por hora)</item>
+        <item>mph (millas por hora)</item>
+        <item>kn (nudos)</item>
+    </string-array>
+
+    <string-array name="units_pressure">
+        <item>Pa (pascales)</item>
+        <item>kPa (kilopascales)</item>
+        <item>bar</item>
+        <item>atm (atmósferas)</item>
+        <item>psi</item>
+    </string-array>
+
+    <string-array name="units_data_storage">
+        <item>bit (bits)</item>
+        <item>B (bytes)</item>
+        <item>kB (kilobytes, 1000 bytes)</item>
+        <item>MB (megabytes, 1 000 000 bytes)</item>
+        <item>GB (gigabytes, 1 000 000 000 bytes)</item>
+    </string-array>
+
+    <string-array name="units_temperature">
+        <item>°C (Celsius)</item>
+        <item>°F (Fahrenheit)</item>
+        <item>K (kelvin)</item>
+    </string-array>
+
+    <string-array name="units_currency">
+        <item>EUR (euro)</item>
+        <item>USD (dólar estadounidense)</item>
+        <item>GBP (libra esterlina)</item>
+        <item>JPY (yen japonés)</item>
     </string-array>
 </resources>
