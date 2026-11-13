@@ -5,12 +5,50 @@ import java.util.Map;
 
 public final class ConversionEngine {
     public enum ConversionType {
-        DISTANCE,
-        SPEED,
-        PRESSURE,
-        DATA_STORAGE,
-        TEMPERATURE,
-        CURRENCY
+        DISTANCE(R.string.category_distance, R.drawable.ruler, R.array.units_distance, false),
+        SPEED(R.string.category_speed, R.drawable.speed, R.array.units_speed, false),
+        PRESSURE(R.string.category_pressure, R.drawable.pressure, R.array.units_pressure, false),
+        DATA_STORAGE(R.string.category_data_storage, R.drawable.data,
+                R.array.units_data_storage, false),
+        TEMPERATURE(R.string.category_temperature, R.drawable.thermometer,
+                R.array.units_temperature, true),
+        CURRENCY(R.string.category_currency, R.drawable.currency, R.array.units_currency, false),
+        VOLUME(R.string.category_volume, R.drawable.volume, R.array.units_volume, false),
+        MASS_WEIGHT(R.string.category_mass, R.drawable.mass, R.array.units_mass, false),
+        TIME(R.string.category_time, R.drawable.time, R.array.units_time, false),
+        AREA(R.string.category_area, R.drawable.area, R.array.units_area, false);
+
+        private final int titleResource;
+        private final int imageResource;
+        private final int unitsArrayResource;
+        private final boolean allowsNegative;
+
+        ConversionType(
+                int titleResource,
+                int imageResource,
+                int unitsArrayResource,
+                boolean allowsNegative) {
+            this.titleResource = titleResource;
+            this.imageResource = imageResource;
+            this.unitsArrayResource = unitsArrayResource;
+            this.allowsNegative = allowsNegative;
+        }
+
+        public int titleResource() {
+            return titleResource;
+        }
+
+        public int imageResource() {
+            return imageResource;
+        }
+
+        public int unitsArrayResource() {
+            return unitsArrayResource;
+        }
+
+        public boolean allowsNegative() {
+            return allowsNegative;
+        }
     }
 
     private interface ConversionStrategy {
@@ -33,8 +71,7 @@ public final class ConversionEngine {
             0.0, 32.0, 273.15
     };
 
-    // Sample ECB reference rates for 2026-11-09: units of currency per 1 EUR.
-    // They are fixed demonstration values, not live exchange rates.
+    // Fixed sample rates relative to EUR; the UI shows the reference date.
     private static final double[] CURRENCY_UNITS_PER_EUR = {
             1.0, 1.1193, 0.83430, 176.79
     };
@@ -48,6 +85,14 @@ public final class ConversionEngine {
                 new double[]{1.0, 1000.0, 100000.0, 101325.0, 6894.757293168});
         registerLinear(ConversionType.DATA_STORAGE,
                 new double[]{1.0, 8.0, 8000.0, 8000000.0, 8000000000.0});
+        registerLinear(ConversionType.VOLUME,
+                new double[]{1.0, 0.001, 1000.0, 3.785411784, 4.54609});
+        registerLinear(ConversionType.MASS_WEIGHT,
+                new double[]{1.0, 1000.0, 0.001, 453.59237, 28.349523125});
+        registerLinear(ConversionType.TIME,
+                new double[]{1.0, 60.0, 3600.0, 86400.0, 604800.0});
+        registerLinear(ConversionType.AREA,
+                new double[]{1.0, 1000000.0, 0.0001, 10000.0, 4046.8564224, 0.09290304});
 
         STRATEGIES.put(ConversionType.TEMPERATURE, ConversionEngine::convertTemperature);
         STRATEGIES.put(ConversionType.CURRENCY, ConversionEngine::convertCurrency);

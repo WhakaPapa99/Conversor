@@ -1,60 +1,31 @@
 package com.example.conversor;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.content.res.Resources;
+import android.view.Gravity;
+import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.conversor.ConversionEngine.ConversionType;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.NumberFormat;
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Map;
-
 public class MainActivity extends AppCompatActivity {
-    private static final Map<ConversionType, Integer> UNIT_ARRAYS =
-            new EnumMap<>(ConversionType.class);
-    private static final Map<ConversionType, Integer> CATEGORY_IMAGES =
-            new EnumMap<>(ConversionType.class);
-
-    static {
-        UNIT_ARRAYS.put(ConversionType.DISTANCE, R.array.units_distance);
-        UNIT_ARRAYS.put(ConversionType.SPEED, R.array.units_speed);
-        UNIT_ARRAYS.put(ConversionType.PRESSURE, R.array.units_pressure);
-        UNIT_ARRAYS.put(ConversionType.DATA_STORAGE, R.array.units_data_storage);
-        UNIT_ARRAYS.put(ConversionType.TEMPERATURE, R.array.units_temperature);
-        UNIT_ARRAYS.put(ConversionType.CURRENCY, R.array.units_currency);
-
-        CATEGORY_IMAGES.put(ConversionType.DISTANCE, R.drawable.ruler);
-        CATEGORY_IMAGES.put(ConversionType.SPEED, R.drawable.speed);
-        CATEGORY_IMAGES.put(ConversionType.PRESSURE, R.drawable.pressure);
-        CATEGORY_IMAGES.put(ConversionType.DATA_STORAGE, R.drawable.data);
-        CATEGORY_IMAGES.put(ConversionType.TEMPERATURE, R.drawable.thermometer);
-        CATEGORY_IMAGES.put(ConversionType.CURRENCY, R.drawable.currency);
-    }
-
-    private ConversionType selectedType;
-    private Spinner spinnerConverter;
-    private Spinner spinnerConverted;
-    private EditText editTextConverter;
-    private TextView textViewResult;
-    private TextView textViewCurrencyNotice;
+    private boolean categoryImageWarningShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,130 +39,97 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Spinner spinnerType = findViewById(R.id.spinnerType);
-        spinnerConverter = findViewById(R.id.spinnerConverter);
-        spinnerConverted = findViewById(R.id.spinnerConverted);
-        editTextConverter = findViewById(R.id.editTextConverter);
-        textViewResult = findViewById(R.id.textViewResult);
-        textViewCurrencyNotice = findViewById(R.id.textViewCurrencyNotice);
-        ImageView imageView = findViewById(R.id.imageView);
-
-        selectedType = ConversionType.values()[spinnerType.getSelectedItemPosition()];
-        updateCategory(selectedType, imageView);
-
-        spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(
-                    AdapterView<?> parent, View view, int position, long id) {
-                ConversionType newType = ConversionType.values()[position];
-                if (newType != selectedType) {
-                    selectedType = newType;
-                    editTextConverter.setText("");
-                    textViewResult.setText(R.string.result_placeholder);
-                    updateCategory(selectedType, imageView);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        AdapterView.OnItemSelectedListener unitSelectionListener =
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(
-                            AdapterView<?> parent, View view, int position, long id) {
-                        updateResult(false);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                };
-        spinnerConverter.setOnItemSelectedListener(unitSelectionListener);
-        spinnerConverted.setOnItemSelectedListener(unitSelectionListener);
-
-        editTextConverter.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence text, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable text) {
-                updateResult(false);
-            }
-        });
-
-        findViewById(R.id.buttonConvert).setOnClickListener(view -> updateResult(true));
-    }
-
-    private void updateCategory(ConversionType type, ImageView imageView) {
-        int unitsArray = UNIT_ARRAYS.get(type);
-        setSpinnerOptions(spinnerConverter, unitsArray, 0);
-        setSpinnerOptions(spinnerConverted, unitsArray, 1);
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), CATEGORY_IMAGES.get(type));
-        imageView.setImageBitmap(bitmap);
-        textViewCurrencyNotice.setVisibility(
-                type == ConversionType.CURRENCY ? View.VISIBLE : View.GONE);
-    }
-
-    private void setSpinnerOptions(Spinner spinner, int unitsArray, int initialPosition) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, unitsArray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        if (adapter.getCount() > initialPosition) {
-            spinner.setSelection(initialPosition);
+        GridLayout categoryGrid = findViewById(R.id.categoryContainer);
+        for (ConversionType type : ConversionType.values()) {
+            addCategoryCard(categoryGrid, type);
         }
     }
 
-    private void updateResult(boolean showInputError) {
-        String input = editTextConverter.getText().toString().trim().replace(',', '.');
-        if (input.isEmpty()) {
-            textViewResult.setText(R.string.result_placeholder);
-            if (showInputError) {
-                showMessage(R.string.enter_number_message);
-            }
-            return;
-        }
+    private void addCategoryCard(GridLayout grid, ConversionType type) {
+        String name = getString(type.titleResource());
+        MaterialCardView card = new MaterialCardView(this);
+        card.setCardBackgroundColor(getColor(R.color.surface_card));
+        card.setStrokeColor(getColor(R.color.card_outline));
+        card.setStrokeWidth(dp(1));
+        card.setRadius(dp(20));
+        card.setCardElevation(dp(3));
+        card.setClickable(true);
+        card.setFocusable(true);
+        card.setContentDescription(getString(R.string.open_converter_for, name));
 
-        final double value;
+        LinearLayout content = new LinearLayout(this);
+        content.setGravity(Gravity.CENTER_HORIZONTAL);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setPadding(dp(10), dp(10), dp(10), dp(10));
+
+        ImageView image = new ImageView(this);
+        image.setLayoutParams(new LinearLayout.LayoutParams(dp(76), dp(76)));
+        image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        image.setContentDescription(name);
+        Bitmap categoryBitmap = loadBitmap(type.imageResource());
+        if (categoryBitmap == null) {
+            categoryBitmap = loadBitmap(R.drawable.ic_category_placeholder);
+            if (!categoryImageWarningShown) {
+                categoryImageWarningShown = true;
+                Snackbar.make(findViewById(R.id.main), R.string.category_image_error_message,
+                        Snackbar.LENGTH_LONG).show();
+            }
+        }
+        image.setImageBitmap(categoryBitmap);
+        content.addView(image);
+
+        TextView label = new TextView(this);
+        label.setGravity(Gravity.CENTER);
+        label.setMaxLines(2);
+        label.setText(name);
+        label.setTextColor(getColor(R.color.text_primary));
+        label.setTextSize(15);
+        label.setTypeface(label.getTypeface(), android.graphics.Typeface.BOLD);
+        LinearLayout.LayoutParams labelParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+        labelParams.setMargins(0, dp(4), 0, dp(6));
+        content.addView(label, labelParams);
+
+        card.addView(content, new MaterialCardView.LayoutParams(
+                MaterialCardView.LayoutParams.MATCH_PARENT,
+                MaterialCardView.LayoutParams.MATCH_PARENT));
+        card.setOnClickListener(view -> openConverter(type));
+
+        GridLayout.LayoutParams cardParams = new GridLayout.LayoutParams();
+        cardParams.width = 0;
+        cardParams.height = dp(156);
+        cardParams.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
+        cardParams.setMargins(dp(5), dp(5), dp(5), dp(5));
+        grid.addView(card, cardParams);
+    }
+
+    private Bitmap loadBitmap(int imageResource) {
+        final Drawable drawable;
         try {
-            value = Double.parseDouble(input);
-        } catch (NumberFormatException exception) {
-            textViewResult.setText(R.string.result_placeholder);
-            if (showInputError) {
-                showMessage(R.string.invalid_number_message);
-            }
-            return;
+            drawable = AppCompatResources.getDrawable(this, imageResource);
+        } catch (Resources.NotFoundException exception) {
+            return null;
+        }
+        if (drawable == null) return null;
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
         }
 
-        if (!Double.isFinite(value)) {
-            textViewResult.setText(R.string.result_placeholder);
-            if (showInputError) {
-                showMessage(R.string.invalid_number_message);
-            }
-            return;
-        }
-
-        double result = ConversionEngine.convert(
-                selectedType,
-                value,
-                spinnerConverter.getSelectedItemPosition(),
-                spinnerConverted.getSelectedItemPosition());
-
-        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-        numberFormat.setMaximumFractionDigits(6);
-        textViewResult.setText(numberFormat.format(result));
+        int size = dp(96);
+        Bitmap vectorBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(vectorBitmap);
+        drawable.setBounds(0, 0, size, size);
+        drawable.draw(canvas);
+        return vectorBitmap;
     }
 
-    private void showMessage(int messageResource) {
-        Snackbar.make(findViewById(R.id.main), messageResource, Snackbar.LENGTH_SHORT).show();
+    private void openConverter(ConversionType type) {
+        Intent intent = new Intent(this, ConversionActivity.class);
+        intent.putExtra(ConversionActivity.EXTRA_CONVERSION_TYPE, type.name());
+        startActivity(intent);
+    }
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }

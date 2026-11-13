@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
@@ -92,23 +91,10 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_category_image"
-                android:contentDescription="@string/conversion_category_image"
-                android:padding="18dp"
-                android:scaleType="fitCenter"
-                tools:srcCompat="@tools:sample/avatars" />
-
             <TextView
-                android:id="@+id/textViewConverted"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/target_unit_label"
                 android:textColor="@color/text_secondary"

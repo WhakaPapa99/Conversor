@@ -1,29 +1,34 @@
 <resources>
     <string name="app_name">Conversor</string>
-    <string name="converter_title">Conversor</string>
-    <string name="converter_type_label">Tipo de conversor:</string>
-    <string name="converter_type_accessibility">Tipo de conversor</string>
-    <string name="number_to_convert">Número a convertir</string>
-    <string name="conversion_category_image">Imagen de la categoría seleccionada</string>
-    <string name="conversion_result">Resultado:</string>
+    <string name="category_selection_title">¿Qué quieres convertir?</string>
+    <string name="category_selection_subtitle">Elige una categoría para empezar.</string>
+    <string name="open_converter_for">Abrir conversor de %1$s</string>
+    <string name="category_image_error_message">No se pudo cargar una imagen de categoría; se muestra un icono genérico.</string>
+    <string name="back_to_categories">Volver a las categorías</string>
+    <string name="category_distance">Distancia</string>
+    <string name="category_speed">Velocidad</string>
+    <string name="category_pressure">Presión</string>
+    <string name="category_data_storage">Almacenamiento de datos</string>
+    <string name="category_temperature">Temperatura</string>
+    <string name="category_currency">Moneda</string>
+    <string name="category_volume">Volumen</string>
+    <string name="category_mass">Masa y peso</string>
+    <string name="category_time">Tiempo</string>
+    <string name="category_area">Área</string>
+    <string name="number_to_convert">Número</string>
     <string name="result_placeholder">—</string>
     <string name="convert">Convertir</string>
     <string name="enter_number_message">Introduce un número para convertir.</string>
     <string name="invalid_number_message">El valor introducido no es válido.</string>
+    <string name="negative_not_allowed_message">Esta categoría no admite valores negativos.</string>
+    <string name="below_absolute_zero_message">La temperatura no puede ser inferior al cero absoluto.</string>
+    <string name="conversion_failed_message">No se pudo realizar la conversión. Comprueba las unidades.</string>
+    <string name="result_out_of_range_message">El resultado queda fuera del rango numérico válido.</string>
     <string name="conversion_heading">Conversión de unidades</string>
     <string name="conversion_subtitle">Elige un valor y las unidades que quieres convertir.</string>
     <string name="source_value_label">Valor y unidad de origen</string>
     <string name="target_unit_label">Unidad de destino</string>
     <string name="currency_sample_notice">Tasas de muestra del BCE · 09/11/2026</string>
-
-    <string-array name="converter_types">
-        <item>Distancia</item>
-        <item>Velocidad</item>
-        <item>Presión</item>
-        <item>Almacenamiento de datos</item>
-        <item>Temperatura</item>
-        <item>Moneda</item>
-    </string-array>
 
     <string-array name="units_distance">
         <item>m (metros)</item>
@@ -69,5 +74,38 @@
         <item>USD (dólar estadounidense)</item>
         <item>GBP (libra esterlina)</item>
         <item>JPY (yen japonés)</item>
+    </string-array>
+
+    <string-array name="units_volume">
+        <item>L (litros)</item>
+        <item>mL (mililitros)</item>
+        <item>m³ (metros cúbicos)</item>
+        <item>US gal (galones estadounidenses)</item>
+        <item>Imp gal (galones imperiales)</item>
+    </string-array>
+
+    <string-array name="units_mass">
+        <item>g (gramos)</item>
+        <item>kg (kilogramos)</item>
+        <item>mg (miligramos)</item>
+        <item>lb (libras)</item>
+        <item>oz (onzas)</item>
+    </string-array>
+
+    <string-array name="units_time">
+        <item>s (segundos)</item>
+        <item>min (minutos)</item>
+        <item>h (horas)</item>
+        <item>d (días)</item>
+        <item>sem (semanas)</item>
+    </string-array>
+
+    <string-array name="units_area">
+        <item>m² (metros cuadrados)</item>
+        <item>km² (kilómetros cuadrados)</item>
+        <item>cm² (centímetros cuadrados)</item>
+        <item>ha (hectáreas)</item>
+        <item>ac (acres)</item>
+        <item>ft² (pies cuadrados)</item>
     </string-array>
 </resources>
