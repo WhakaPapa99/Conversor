@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.conversor.ConversionEngine.ConversionType;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -207,7 +208,22 @@ public class ConversionActivity extends AppCompatActivity {
         resultRangeWarningShown = false;
 
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
-        numberFormat.setMaximumFractionDigits(6);
+        numberFormat.setMinimumFractionDigits(2);
+        int maximumFractionDigits = 2;
+        double absoluteResult = Math.abs(result);
+        if (absoluteResult > 0.0 && absoluteResult <= 0.005) {
+            maximumFractionDigits = Math.min(
+                    12, (int) Math.ceil(-Math.log10(absoluteResult)));
+        }
+        numberFormat.setMaximumFractionDigits(maximumFractionDigits);
+
+        if (absoluteResult > 0.0 && absoluteResult <= 0.0000000000005) {
+            DecimalFormat scientificFormat = (DecimalFormat)
+                    NumberFormat.getNumberInstance(Locale.getDefault());
+            scientificFormat.applyPattern("0.######E0");
+            textViewResult.setText(scientificFormat.format(result));
+            return;
+        }
         textViewResult.setText(numberFormat.format(result));
     }
 
